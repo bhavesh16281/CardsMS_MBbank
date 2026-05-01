@@ -14,3 +14,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    config:
+      import:
+        - application_qa.yml
+        - application_prod.yml
+      profiles:
+        active: "prod"
+
+build:
+  version: "3.0.0"
+cards:
+  message: "Cards microservice is active"
+  contactDetails:
+    name: "Muthyalu Bhavesh"
+    email: "bhavesh16281@gmail.com"
+    phone: "+91 8309828565"

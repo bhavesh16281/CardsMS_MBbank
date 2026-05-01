@@ -1,5 +1,6 @@
 package com.bhavesh16281.cards.controller;
 
+import com.bhavesh16281.cards.DTO.CardsContactInfoDto;
 import com.bhavesh16281.cards.constants.CardsConstants;
 import com.bhavesh16281.cards.DTO.CardsDto;
 import com.bhavesh16281.cards.DTO.ErrorResponseDto;
@@ -13,7 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +28,63 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs in EazyBank to CREATE, UPDATE, FETCH AND DELETE card details"
 )
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
+@RequestMapping(value = "/api/cards", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class CardsController {
 
-    private CardsService iCardsService;
+    private final CardsService iCardsService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private CardsContactInfoDto cardsContactInfoDto;
+
+    public CardsController(CardsService iCardsService) {
+        this.iCardsService = iCardsService;
+    }
+
+    @Operation(
+            summary = "Get Build Information",
+            description = "Get Build information that is deployed into cards microservice.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Http Status OK"),
+            @ApiResponse(responseCode = "500",description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo(){
+        return ResponseEntity.ok(buildVersion);
+    }
+
+    @Operation(
+            summary = "Get Java Version",
+            description = "Get Java version that is deployed into cards microservice.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Http Status OK"),
+            @ApiResponse(responseCode = "500",description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/java-info")
+    public ResponseEntity<String> getJavaInfo(){
+        return ResponseEntity.ok(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get Contact Info",
+            description = "Contact info if there is any issue in the API.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Http Status OK"),
+            @ApiResponse(responseCode = "500",description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactInfoDto> getContactInfo(){
+        return ResponseEntity.ok(cardsContactInfoDto);
+    }
 
     @Operation(
             summary = "Create Card REST API",
