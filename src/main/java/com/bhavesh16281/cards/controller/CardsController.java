@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class CardsController {
 
-    private final CardsService iCardsService;
+    private final CardsService cardsService;
 
     @Value("${build.version}")
     private String buildVersion;
@@ -43,8 +43,8 @@ public class CardsController {
     @Autowired
     private CardsContactInfoDto cardsContactInfoDto;
 
-    public CardsController(CardsService iCardsService) {
-        this.iCardsService = iCardsService;
+    public CardsController(CardsService cardsService) {
+        this.cardsService = cardsService;
     }
 
     @Operation(
@@ -108,7 +108,7 @@ public class CardsController {
     public ResponseEntity<ResponseDto> createCard(@Valid @RequestParam
                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                   String mobileNumber) {
-        iCardsService.createCard(mobileNumber);
+        cardsService.createCard(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(CardsConstants.STATUS_201, CardsConstants.MESSAGE_201));
@@ -135,7 +135,7 @@ public class CardsController {
     public ResponseEntity<CardsDto> fetchCardDetails(@RequestParam
                                                      @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
-        CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
+        CardsDto cardsDto = cardsService.fetchCard(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
 
@@ -162,7 +162,7 @@ public class CardsController {
     })
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateCardDetails(@Valid @RequestBody CardsDto cardsDto) {
-        boolean isUpdated = iCardsService.updateCard(cardsDto);
+        boolean isUpdated = cardsService.updateCard(cardsDto);
         if(isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -199,7 +199,7 @@ public class CardsController {
     public ResponseEntity<ResponseDto> deleteCardDetails(@RequestParam
                                                          @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                          String mobileNumber) {
-        boolean isDeleted = iCardsService.deleteCard(mobileNumber);
+        boolean isDeleted = cardsService.deleteCard(mobileNumber);
         if(isDeleted) {
             return ResponseEntity
                     .status(HttpStatus.OK)
