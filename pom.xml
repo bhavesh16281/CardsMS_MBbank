@@ -102,10 +102,18 @@
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
         </dependency> -->
 
-		<dependency>
+		<!-- Used for client side load balancing and service discovery -->
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency> -->
+
+		<!-- used for server side load balancing and service discovery in kubernetes environment -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-kubernetes-discoveryclient</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
@@ -138,7 +146,7 @@
 				<version>3.5.1</version>
 				<configuration>
 					<to>
-						<image>bhavesh16281/${project.artifactId}:3.8</image>
+						<image>bhavesh16281/${project.artifactId}:3.9</image>
 					</to>
 				</configuration>
 			</plugin>

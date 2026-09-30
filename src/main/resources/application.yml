@@ -28,6 +28,10 @@ spring:
   cloud:
     bus:
       enabled: true
+    # used for server side load balancing and service discovery in kubernetes environment
+    kubernetes:
+      discovery:
+        all-namespaces: true
 
 management:
   endpoints:
@@ -55,14 +59,15 @@ management:
 endpoints:
   shutdown:
     enabled: true
-eureka:
-  instance:
-    preferIpAddress: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+# used for client side service discovery 
+# eureka:
+#   instance:
+#     preferIpAddress: true
+#   client:
+#     fetchRegistry: true
+#     registerWithEureka: true
+#     serviceUrl:
+#       defaultZone: http://localhost:8070/eureka/
 
 info:
   app:
